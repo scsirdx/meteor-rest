@@ -23,6 +23,10 @@ WebApp.rawConnectHandlers.use(connectRoute(function (router) {
   connectRouter = router;
 }));
 
+// Error middleware must be added last, to catch errors from prior middleware
+JsonRoutes.errorMiddleware = connect();
+WebApp.rawConnectHandlers.use(JsonRoutes.errorMiddleware);
+
 JsonRoutes.add = function (method, path, handler) {
   // Make sure path starts with a slash
   if (path[0] !== "/") {
