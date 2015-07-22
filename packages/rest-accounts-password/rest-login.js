@@ -26,8 +26,9 @@ JsonRoutes.add("post", "/users/login", function (req, res) {
   }
 
   if (! user) {
-    throw new Meteor.Error("not-found",
-      "User with that username or email address not found.");
+    throw new Meteor.Error(403, 'Login failed')
+    // throw new Meteor.Error("not-found",
+    //   "User with that username or email address not found.");
   }
 
   var result = Accounts._checkPassword(user, options.password);
@@ -37,6 +38,7 @@ JsonRoutes.add("post", "/users/login", function (req, res) {
   });
 
   if (result.error) {
+    if (result.error.reason === 'Incorrect password') result.error.reason = 'Login failed';
     throw result.error;
   }
 
